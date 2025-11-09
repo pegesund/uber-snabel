@@ -163,6 +163,11 @@ async function startWithoutUpload() {
 
         const data = await response.json();
 
+        if (!response.ok) {
+            alert('Failed to start Claude Code: ' + (data.error || 'Unknown error'));
+            return;
+        }
+
         // Hide upload step, show monitor
         document.getElementById('step-upload').classList.add('hidden');
         document.getElementById('step-monitor').classList.remove('hidden');
