@@ -12,10 +12,10 @@ import java.util.Properties;
 @Startup
 public class AppConfig {
 
-    @ConfigProperty(name = "uber-snabel.frontend.path", defaultValue = "/home/petter/dev/snabel/snabel_frontend")
+    @ConfigProperty(name = "uber-snabel.frontend.path", defaultValue = "../../accounting-system")
     String defaultFrontendPath;
 
-    @ConfigProperty(name = "uber-snabel.backend.path", defaultValue = "/home/petter/dev/snabel/snabel_backend")
+    @ConfigProperty(name = "uber-snabel.backend.path", defaultValue = "../../snabel_backend")
     String defaultBackendPath;
 
     @ConfigProperty(name = "uber-snabel.temp.directory", defaultValue = "/tmp/uber-snabel")
