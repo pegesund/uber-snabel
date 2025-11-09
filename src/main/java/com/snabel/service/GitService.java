@@ -22,29 +22,32 @@ public class GitService {
     LogWebSocket logWebSocket;
 
     /**
-     * Create a new branch for the import session
+     * Create a new branch for the import session (only if currently on main)
      */
     public String createBranch(String sessionId, String description) throws IOException {
-        String branchName = generateBranchName(description);
         String frontendPath = appConfig.getFrontendPath();
 
-        logInfo(sessionId, "Creating branch: " + branchName);
+        // Check current branch
+        String currentBranch = getCurrentBranch(sessionId);
+        logInfo(sessionId, "Current branch: " + currentBranch);
 
-        // Ensure we're in frontend directory and on main
-        try {
-            executeGitCommand(sessionId, frontendPath, "git", "checkout", "main");
-        } catch (IOException e) {
-            logInfo(sessionId, "Could not checkout main, trying master...");
-            try {
-                executeGitCommand(sessionId, frontendPath, "git", "checkout", "master");
-            } catch (IOException e2) {
-                logInfo(sessionId, "Warning: Could not checkout main/master, staying on current branch");
-            }
+        // If already on a figma-import branch, reuse it
+        if (currentBranch.startsWith(appConfig.getBranchPrefix() + "/")) {
+            logInfo(sessionId, "Already on a figma-import branch, reusing: " + currentBranch);
+            return currentBranch;
         }
 
-        // Try to pull if remote exists
+        // Only create new branch if on main/master
+        if (!currentBranch.equals("main") && !currentBranch.equals("master")) {
+            throw new IOException("Cannot create figma-import branch: not on main/master branch (currently on: " + currentBranch + ")");
+        }
+
+        String branchName = generateBranchName(description);
+        logInfo(sessionId, "Creating new branch: " + branchName);
+
+        // Try to pull latest main if remote exists
         try {
-            executeGitCommand(sessionId, frontendPath, "git", "pull", "origin", "HEAD");
+            executeGitCommand(sessionId, frontendPath, "git", "pull", "origin", currentBranch);
         } catch (IOException e) {
             logInfo(sessionId, "Warning: Could not pull from origin (no remote configured)");
         }
