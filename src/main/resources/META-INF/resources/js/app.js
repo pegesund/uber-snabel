@@ -463,3 +463,27 @@ async function sendCommand() {
         alert('Failed to send command: ' + error.message);
     }
 }
+
+// Reset frontend to last commit
+async function resetFrontend() {
+    if (!confirm('Are you sure you want to reset the frontend to HEAD? This will discard all uncommitted changes!')) {
+        return;
+    }
+
+    try {
+        const response = await fetch('/api/git/reset-frontend', {
+            method: 'POST'
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            alert('Frontend reset successfully!\n\n' + data.message);
+        } else {
+            alert('Failed to reset frontend: ' + data.error);
+        }
+
+    } catch (error) {
+        alert('Failed to reset frontend: ' + error.message);
+    }
+}
