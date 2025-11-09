@@ -216,9 +216,18 @@ async function mergeBranch() {
         return;
     }
 
+    // Ask for commit message
+    const commitMessage = prompt('Enter commit message for the merge:', 'Merge session changes');
+    if (!commitMessage || commitMessage.trim() === '') {
+        alert('Merge cancelled - commit message is required');
+        return;
+    }
+
     try {
         const response = await fetch(`/api/import/session/${currentSessionId}/merge`, {
-            method: 'POST'
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ commitMessage: commitMessage.trim() })
         });
 
         const data = await response.json();

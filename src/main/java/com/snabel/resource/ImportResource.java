@@ -256,8 +256,9 @@ public class ImportResource {
      */
     @POST
     @jakarta.ws.rs.Path("/session/{sessionId}/merge")
+    @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
-    public Response mergeBranch(@PathParam("sessionId") String sessionId) {
+    public Response mergeBranch(@PathParam("sessionId") String sessionId, Map<String, String> body) {
         ImportSession session = ImportSession.findBySessionId(sessionId);
         if (session == null) {
             return Response.status(Response.Status.NOT_FOUND)
@@ -271,8 +272,13 @@ public class ImportResource {
                 .build();
         }
 
+        String commitMessage = body != null ? body.get("commitMessage") : null;
+        if (commitMessage == null || commitMessage.trim().isEmpty()) {
+            commitMessage = "Merge session: " + session.description;
+        }
+
         try {
-            gitService.mergeBranch(sessionId, session.branchName);
+            gitService.mergeBranch(sessionId, session.branchName, commitMessage);
 
             session.merged = true;
             session.mergedAt = LocalDateTime.now();

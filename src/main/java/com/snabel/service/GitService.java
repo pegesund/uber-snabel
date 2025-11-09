@@ -59,7 +59,7 @@ public class GitService {
     /**
      * Merge branch into main with conflict resolution
      */
-    public void mergeBranch(String sessionId, String branchName) throws IOException {
+    public void mergeBranch(String sessionId, String branchName, String commitMessage) throws IOException {
         String frontendPath = appConfig.getFrontendPath();
 
         logInfo(sessionId, "Starting merge of branch: " + branchName);
@@ -79,8 +79,7 @@ public class GitService {
 
         // Attempt merge
         try {
-            executeGitCommand(sessionId, frontendPath, "git", "merge", branchName, "--no-ff", "-m",
-                "Merge Figma import: " + branchName);
+            executeGitCommand(sessionId, frontendPath, "git", "merge", branchName, "--no-ff", "-m", commitMessage);
             logInfo(sessionId, "Branch merged successfully without conflicts");
         } catch (IOException e) {
             // Merge conflict - resolve automatically
@@ -90,7 +89,7 @@ public class GitService {
             // Complete merge
             executeGitCommand(sessionId, frontendPath, "git", "add", ".");
             executeGitCommand(sessionId, frontendPath, "git", "commit", "-m",
-                "Merge Figma import with auto-resolved conflicts: " + branchName);
+                commitMessage + " (with auto-resolved conflicts)");
 
             logInfo(sessionId, "Conflicts resolved and merge completed");
         }
