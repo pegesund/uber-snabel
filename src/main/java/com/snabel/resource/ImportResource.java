@@ -364,13 +364,29 @@ public class ImportResource {
      */
     @GET
     @jakarta.ws.rs.Path("/sessions")
+    @Transactional
     public Response listSessions(
-        @QueryParam("limit") @DefaultValue("50") int limit
+        @QueryParam("limit") @DefaultValue("15") int limit
     ) {
-        List<ImportSession> sessions = ImportSession.listAll();
+        // Get all sessions sorted by updatedAt (most recent first)
+        List<ImportSession> allSessions = ImportSession.listAll();
+        allSessions.sort((a, b) -> {
+            LocalDateTime aTime = a.updatedAt != null ? a.updatedAt : a.createdAt;
+            LocalDateTime bTime = b.updatedAt != null ? b.updatedAt : b.createdAt;
+            return bTime.compareTo(aTime);
+        });
 
-        List<Map<String, Object>> result = sessions.stream()
-            .sorted((a, b) -> b.createdAt.compareTo(a.createdAt))
+        // Keep only the most recent 15 sessions, delete the rest
+        if (allSessions.size() > 15) {
+            List<ImportSession> sessionsToDelete = allSessions.subList(15, allSessions.size());
+            for (ImportSession session : sessionsToDelete) {
+                session.delete();
+            }
+            allSessions = allSessions.subList(0, 15);
+        }
+
+        // Return the sessions (limited by query param, default 15)
+        List<Map<String, Object>> result = allSessions.stream()
             .limit(limit)
             .map(s -> {
                 Map<String, Object> map = new HashMap<>();
@@ -378,6 +394,7 @@ public class ImportResource {
                 map.put("description", s.description);
                 map.put("status", s.status);
                 map.put("createdAt", s.createdAt);
+                map.put("updatedAt", s.updatedAt != null ? s.updatedAt : s.createdAt);
                 map.put("merged", s.merged != null && s.merged);
                 return map;
             })

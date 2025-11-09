@@ -20,7 +20,7 @@ public class GitResource {
     AppConfig appConfig;
 
     /**
-     * Reset frontend to HEAD (git reset --hard HEAD)
+     * Reset frontend: if on figma-import branch, delete it and switch to main; otherwise reset to HEAD
      */
     @POST
     @jakarta.ws.rs.Path("/reset-frontend")
@@ -34,35 +34,98 @@ public class GitResource {
                     .build();
             }
 
-            // Execute git reset --hard HEAD
-            ProcessBuilder pb = new ProcessBuilder("git", "reset", "--hard", "HEAD");
-            pb.directory(Path.of(frontendPath).toFile());
-            pb.redirectErrorStream(true);
+            Path frontendDir = Path.of(frontendPath).toFile().getCanonicalFile().toPath();
 
-            Process process = pb.start();
+            // Check current branch
+            ProcessBuilder pbBranch = new ProcessBuilder("git", "branch", "--show-current");
+            pbBranch.directory(frontendDir.toFile());
+            pbBranch.redirectErrorStream(true);
 
-            StringBuilder output = new StringBuilder();
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+            Process branchProcess = pbBranch.start();
+            StringBuilder branchOutput = new StringBuilder();
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(branchProcess.getInputStream()))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
-                    output.append(line).append("\n");
+                    branchOutput.append(line);
                 }
             }
+            branchProcess.waitFor();
 
-            int exitCode = process.waitFor();
+            String currentBranch = branchOutput.toString().trim();
+            StringBuilder output = new StringBuilder();
 
-            if (exitCode == 0) {
-                return Response.ok(Map.of(
-                    "message", "Frontend reset to HEAD successfully",
-                    "output", output.toString()
-                )).build();
-            } else {
-                return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity(Map.of(
-                        "error", "Git reset failed",
+            // If on a figma-import branch, delete it and switch to main
+            if (currentBranch.startsWith("figma-import/")) {
+                // Switch to main
+                ProcessBuilder pbCheckout = new ProcessBuilder("git", "checkout", "main");
+                pbCheckout.directory(frontendDir.toFile());
+                pbCheckout.redirectErrorStream(true);
+
+                Process checkoutProcess = pbCheckout.start();
+                try (BufferedReader reader = new BufferedReader(new InputStreamReader(checkoutProcess.getInputStream()))) {
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        output.append(line).append("\n");
+                    }
+                }
+                int checkoutExit = checkoutProcess.waitFor();
+
+                if (checkoutExit != 0) {
+                    return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                        .entity(Map.of("error", "Failed to switch to main", "output", output.toString()))
+                        .build();
+                }
+
+                // Delete the figma-import branch
+                ProcessBuilder pbDelete = new ProcessBuilder("git", "branch", "-D", currentBranch);
+                pbDelete.directory(frontendDir.toFile());
+                pbDelete.redirectErrorStream(true);
+
+                Process deleteProcess = pbDelete.start();
+                try (BufferedReader reader = new BufferedReader(new InputStreamReader(deleteProcess.getInputStream()))) {
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        output.append(line).append("\n");
+                    }
+                }
+                int deleteExit = deleteProcess.waitFor();
+
+                if (deleteExit == 0) {
+                    return Response.ok(Map.of(
+                        "message", "Deleted branch " + currentBranch + " and switched to main",
                         "output", output.toString()
-                    ))
-                    .build();
+                    )).build();
+                } else {
+                    return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                        .entity(Map.of("error", "Failed to delete branch", "output", output.toString()))
+                        .build();
+                }
+            } else {
+                // On main or other branch: just reset to HEAD
+                ProcessBuilder pb = new ProcessBuilder("git", "reset", "--hard", "HEAD");
+                pb.directory(frontendDir.toFile());
+                pb.redirectErrorStream(true);
+
+                Process process = pb.start();
+                try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        output.append(line).append("\n");
+                    }
+                }
+
+                int exitCode = process.waitFor();
+
+                if (exitCode == 0) {
+                    return Response.ok(Map.of(
+                        "message", "Frontend reset to HEAD successfully",
+                        "output", output.toString()
+                    )).build();
+                } else {
+                    return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                        .entity(Map.of("error", "Git reset failed", "output", output.toString()))
+                        .build();
+                }
             }
 
         } catch (Exception e) {

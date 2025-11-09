@@ -39,6 +39,9 @@ public class ImportSession extends PanacheEntity {
     @Column(nullable = false)
     public LocalDateTime createdAt;
 
+    @Column(nullable = false)
+    public LocalDateTime updatedAt;
+
     public LocalDateTime startedAt;
 
     public LocalDateTime completedAt;
@@ -65,9 +68,17 @@ public class ImportSession extends PanacheEntity {
         if (createdAt == null) {
             createdAt = LocalDateTime.now();
         }
+        if (updatedAt == null) {
+            updatedAt = LocalDateTime.now();
+        }
         if (status == null) {
             status = SessionStatus.CREATED;
         }
+    }
+
+    @jakarta.persistence.PreUpdate
+    public void preUpdate() {
+        updatedAt = LocalDateTime.now();
     }
 
     public static ImportSession findBySessionId(String sessionId) {
