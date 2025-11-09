@@ -211,19 +211,6 @@ async function stopProcess() {
     }
 }
 
-async function viewDiff() {
-    try {
-        const response = await fetch(`/api/import/session/${currentSessionId}/diff`);
-        const diff = await response.text();
-
-        // Open diff in new window
-        const win = window.open('', 'Diff', 'width=800,height=600');
-        win.document.write('<pre style="font-family: monospace; white-space: pre-wrap;">' + escapeHtml(diff) + '</pre>');
-    } catch (error) {
-        alert('Failed to get diff: ' + error.message);
-    }
-}
-
 async function mergeBranch() {
     if (!confirm('Are you sure you want to merge this branch to main? This cannot be undone.')) {
         return;
