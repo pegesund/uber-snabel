@@ -23,14 +23,14 @@ public class ClaudeCodeInteractionTest {
     public static class TestPortProfile implements QuarkusTestProfile {
         @Override
         public Map<String, String> getConfigOverrides() {
-            return Map.of("quarkus.http.port", "8082");
+            return Map.of("quarkus.http.port", "8081");
         }
     }
 
     private static WebDriver driver;
     private static WebDriverWait wait;
     private static String sessionId;
-    private static final int TEST_PORT = 8082;
+    private static final int TEST_PORT = 8081;
 
     @BeforeAll
     public static void setupDriver() {

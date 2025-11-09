@@ -104,6 +104,8 @@ async function createSession() {
         const data = await response.json();
         currentSessionId = data.sessionId;
 
+        alert('Session created: ' + data.sessionId);
+
         // Show upload step
         document.getElementById('step-upload').classList.remove('hidden');
 
