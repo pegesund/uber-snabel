@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
     checkStatus();
     loadSessions();
     loadMfes();
-    setInterval(checkStatus, 5000); // Update status every 5 seconds
+    setInterval(checkStatus, 10000); // Update status every 10 seconds
 });
 
 // Tab Management

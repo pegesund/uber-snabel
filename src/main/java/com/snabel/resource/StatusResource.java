@@ -35,15 +35,15 @@ public class StatusResource {
         status.put("path", frontendPath);
         status.put("exists", Files.exists(Path.of(frontendPath)));
 
-        // Check if frontend is actually responding
-        String url = "http://localhost:4200";
+        // Check if frontend is actually responding (try IPv6 first since Angular dev server uses IPv6)
+        String url = "http://[::1]:4200";
         boolean portOpen = checkPortInUse(4200);
         boolean responding = checkHttpService(url);
 
         status.put("running", responding);
         status.put("portOpen", portOpen);
         status.put("responding", responding);
-        status.put("url", url);
+        status.put("url", "http://localhost:4200");
 
         return Response.ok(status).build();
     }
@@ -62,7 +62,7 @@ public class StatusResource {
         status.put("exists", Files.exists(Path.of(backendPath)));
 
         // Check if backend is actually responding
-        String url = "http://localhost:8080/api/status";
+        String url = "http://127.0.0.1:8080/";
         boolean portOpen = checkPortInUse(8080);
         boolean responding = checkHttpService(url);
 
@@ -191,12 +191,13 @@ public class StatusResource {
             connection.setConnectTimeout(2000); // 2 second timeout
             connection.setReadTimeout(2000);
             connection.setRequestMethod("GET");
+            connection.setInstanceFollowRedirects(true);
 
             int responseCode = connection.getResponseCode();
             connection.disconnect();
 
-            // Any response (even error codes) means the service is responding
-            return responseCode > 0;
+            // Any 2xx or 3xx response means the service is responding
+            return responseCode >= 200 && responseCode < 400;
         } catch (Exception e) {
             return false;
         }
