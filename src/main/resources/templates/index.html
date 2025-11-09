@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uber Snabel - Figma to Code Transformer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .log-entry {
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+        }
+        .log-info { color: #3b82f6; }
+        .log-error { color: #ef4444; }
+        .log-git { color: #8b5cf6; }
+        .log-file { color: #10b981; }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="min-h-screen">
+        <!-- Header -->
+        <header class="bg-white shadow">
+            <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                <h1 class="text-3xl font-bold text-gray-900">Uber Snabel</h1>
+                <p class="mt-1 text-sm text-gray-500">Transform Figma code to production-ready React</p>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+            <!-- Status Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div class="bg-white overflow-hidden shadow rounded-lg">
+                    <div class="p-5">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0">
+                                <svg class="h-6 w-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
+                                </svg>
+                            </div>
+                            <div class="ml-5 w-0 flex-1">
+                                <dl>
+                                    <dt class="text-sm font-medium text-gray-500 truncate">Frontend</dt>
+                                    <dd class="flex items-center">
+                                        <div class="text-lg font-medium text-gray-900" id="frontend-status">Checking...</div>
+                                    </dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white overflow-hidden shadow rounded-lg">
+                    <div class="p-5">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0">
+                                <svg class="h-6 w-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"/>
+                                </svg>
+                            </div>
+                            <div class="ml-5 w-0 flex-1">
+                                <dl>
+                                    <dt class="text-sm font-medium text-gray-500 truncate">Backend</dt>
+                                    <dd class="flex items-center">
+                                        <div class="text-lg font-medium text-gray-900" id="backend-status">Checking...</div>
+                                    </dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white overflow-hidden shadow rounded-lg">
+                    <div class="p-5">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0">
+                                <svg class="h-6 w-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                </svg>
+                            </div>
+                            <div class="ml-5 w-0 flex-1">
+                                <dl>
+                                    <dt class="text-sm font-medium text-gray-500 truncate">Active Sessions</dt>
+                                    <dd class="flex items-center">
+                                        <div class="text-lg font-medium text-gray-900" id="session-count">0</div>
+                                    </dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Panel -->
+            <div class="bg-white shadow rounded-lg">
+                <div class="border-b border-gray-200">
+                    <nav class="-mb-px flex" aria-label="Tabs">
+                        <button onclick="showTab('new')" id="tab-new" class="tab-button border-b-2 border-indigo-500 py-4 px-6 text-center font-medium text-sm text-indigo-600">
+                            New Import
+                        </button>
+                        <button onclick="showTab('sessions')" id="tab-sessions" class="tab-button border-b-2 border-transparent py-4 px-6 text-center font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                            Sessions
+                        </button>
+                        <button onclick="showTab('config')" id="tab-config" class="tab-button border-b-2 border-transparent py-4 px-6 text-center font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                            Configuration
+                        </button>
+                    </nav>
+                </div>
+
+                <!-- Tab Content -->
+                <div class="p-6">
+                    <!-- New Import Tab -->
+                    <div id="content-new" class="tab-content">
+                        <h2 class="text-2xl font-bold mb-4">Create New Import</h2>
+
+                        <div class="space-y-6">
+                            <!-- Step 1: Create Session -->
+                            <div class="border rounded-lg p-4">
+                                <h3 class="text-lg font-semibold mb-3">Step 1: Create Session</h3>
+                                <div class="space-y-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">Description</label>
+                                        <input type="text" id="description" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2 border" placeholder="E.g., Invoice management UI">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">Target Micro-Frontend (MFE)</label>
+                                        <select id="targetMfe" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2 border">
+                                            <option value="">Loading MFEs...</option>
+                                        </select>
+                                        <p class="mt-1 text-xs text-gray-500">Select which MFE app to modify with the Figma code</p>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">Instructions for Claude</label>
+                                        <textarea id="instructions" rows="4" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2 border" placeholder="Additional instructions for Claude Code..."></textarea>
+                                    </div>
+                                    <button onclick="createSession()" class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">
+                                        Create Session
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Step 2: Upload Zip (Optional) -->
+                            <div id="step-upload" class="border rounded-lg p-4 hidden">
+                                <h3 class="text-lg font-semibold mb-3">Step 2: Upload Figma Code (Optional)</h3>
+                                <div class="space-y-4">
+                                    <div class="bg-blue-50 border border-blue-200 rounded p-3 text-sm text-blue-800">
+                                        <strong>Two options:</strong><br>
+                                        1. <strong>Upload Figma code</strong> to transform it into production code<br>
+                                        2. <strong>Skip upload</strong> and start Claude Code directly for general development tasks
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">Zip File</label>
+                                        <input type="file" id="zipFile" accept=".zip" class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
+                                    </div>
+                                    <div class="flex space-x-2">
+                                        <button onclick="uploadZip()" class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">
+                                            Upload & Analyze
+                                        </button>
+                                        <button onclick="startWithoutUpload()" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700">
+                                            Start Without Upload
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Step 3: Start Transformation -->
+                            <div id="step-start" class="border rounded-lg p-4 hidden">
+                                <h3 class="text-lg font-semibold mb-3">Step 3: Start Transformation</h3>
+                                <div class="space-y-4">
+                                    <div id="analysis-results" class="bg-gray-50 p-3 rounded text-sm"></div>
+                                    <button onclick="startTransformation()" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700">
+                                        Start Claude Code
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Step 4: Monitor & Control -->
+                            <div id="step-monitor" class="border rounded-lg p-4 hidden">
+                                <h3 class="text-lg font-semibold mb-3">Step 4: Monitor Progress</h3>
+                                <div class="space-y-4">
+                                    <div class="flex space-x-2">
+                                        <button onclick="stopProcess()" class="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700">
+                                            Stop
+                                        </button>
+                                        <button onclick="viewDiff()" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
+                                            View Changes
+                                        </button>
+                                        <button onclick="mergeBranch()" class="bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700">
+                                            Merge to Main
+                                        </button>
+                                    </div>
+
+                                    <!-- Command Interface -->
+                                    <div class="bg-gray-50 p-3 rounded-lg">
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Send Command to Claude Code</label>
+                                        <div class="flex space-x-2">
+                                            <input type="text" id="command-input"
+                                                   class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+                                                   placeholder="Enter command or question..."
+                                                   onkeypress="if(event.key==='Enter') sendCommand()">
+                                            <button onclick="sendCommand()" class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">
+                                                Send
+                                            </button>
+                                        </div>
+                                        <p class="text-xs text-gray-500 mt-1">Send commands or queries to the running Claude Code process</p>
+                                    </div>
+
+                                    <div class="bg-black text-white p-4 rounded-lg h-96 overflow-y-auto font-mono text-sm" id="log-output">
+                                        <div class="text-gray-400">Waiting for logs...</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sessions Tab -->
+                    <div id="content-sessions" class="tab-content hidden">
+                        <h2 class="text-2xl font-bold mb-4">Import Sessions</h2>
+                        <div id="sessions-list" class="space-y-2">
+                            <p class="text-gray-500">Loading sessions...</p>
+                        </div>
+                    </div>
+
+                    <!-- Configuration Tab -->
+                    <div id="content-config" class="tab-content hidden">
+                        <h2 class="text-2xl font-bold mb-4">Configuration</h2>
+                        <div id="config-content" class="space-y-4">
+                            <p class="text-gray-500">Loading configuration...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="/js/app.js"></script>
+</body>
+</html>
