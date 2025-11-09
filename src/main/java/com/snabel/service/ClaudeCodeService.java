@@ -177,8 +177,23 @@ public class ClaudeCodeService {
 
     public boolean isProcessRunning(String sessionId) {
         // In --print mode, there's no long-running process
-        // Instead, check if the session has a Claude session ID
-        return sessionClaudeIds.containsKey(sessionId);
+        // First check in-memory map
+        if (sessionClaudeIds.containsKey(sessionId)) {
+            return true;
+        }
+
+        // If not in memory, check database and restore to memory if session is active
+        ImportSession session = ImportSession.findBySessionId(sessionId);
+        if (session != null && session.claudeSessionId != null &&
+            (session.status == ImportSession.SessionStatus.RUNNING ||
+             session.status == ImportSession.SessionStatus.TRANSFORMING)) {
+            // Restore to in-memory map
+            sessionClaudeIds.put(sessionId, session.claudeSessionId);
+            sessionFirstCommand.putIfAbsent(sessionId, false); // Assume not first command if restoring
+            return true;
+        }
+
+        return false;
     }
 
     // Logging helpers
