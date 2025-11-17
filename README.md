@@ -1,6 +1,6 @@
-# Uber Snabel - Figma to Production Code Transformer
+# Uber Snabel - Claude Code Interface
 
-A meta-programming system that transforms Figma-exported TypeScript code into production-ready React code for the Snabel accounting system using Claude Code with streaming.
+A meta-programming system that transforms uploaded TypeScript code into production-ready React code for the Snabel accounting system using Claude Code with streaming.
 
 This project uses Quarkus, the Supersonic Subatomic Java Framework.
 
@@ -8,7 +8,7 @@ This project uses Quarkus, the Supersonic Subatomic Java Framework.
 
 Uber Snabel provides a web-based interface for accountants and designers to:
 
-1. Upload Figma-exported TypeScript/React code (as zip files)
+1. Upload uploaded TypeScript/React code (as zip files)
 2. Provide context and instructions about what the code implements
 3. Let Claude Code transform mockup code into production-ready components
 4. Monitor the transformation process in real-time via WebSocket
@@ -18,7 +18,7 @@ Uber Snabel provides a web-based interface for accountants and designers to:
 
 ## Features
 
-- **Zip Upload & Analysis**: Upload Figma code, auto-unpack and analyze
+- **Zip Upload & Analysis**: Upload source code, auto-unpack and analyze
 - **Claude Code Integration**: Subprocess execution with streaming output
 - **Session Management**: Continue existing sessions or start new ones
 - **Git Integration**: Auto branch creation, conflict resolution, merging
@@ -59,7 +59,7 @@ Uber Snabel provides a web-based interface for accountants and designers to:
 ## Usage Workflow
 
 1. Create session with description
-2. Upload Figma zip file
+2. Upload source zip file
 3. Start transformation (Claude Code runs automatically)
 4. Monitor real-time logs
 5. View changes and validate
@@ -85,7 +85,7 @@ frontend.path=../snabel_frontend
 backend.path=../snabel_backend
 claude.executable=claude
 claude.unsafe.mode=true
-branch.prefix=figma-import
+branch.prefix=claude-code
 ```
 
 Or use the Configuration tab in the web UI.

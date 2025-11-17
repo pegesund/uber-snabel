@@ -2,12 +2,12 @@
 
 ## Overview
 
-You can now start Claude Code sessions **without uploading any Figma code**. This allows you to have direct conversations with Claude Code for general development tasks, bug fixes, refactoring, or any other coding work.
+You can now start Claude Code sessions **without uploading any source code**. This allows you to have direct conversations with Claude Code for general development tasks, bug fixes, refactoring, or any other coding work.
 
 ## Two Modes of Operation
 
-### 1. **Figma Transformation Mode** (Original)
-- Upload Figma-exported zip file
+### 1. **source code Transformation Mode** (Original)
+- Upload uploaded zip file
 - Claude transforms mockup code into production-ready components
 - Works with uploaded files as context
 
@@ -167,7 +167,7 @@ curl -X POST http://localhost:8081/api/import/session/{id}/command \
 
 | Feature | With Upload | Without Upload |
 |---------|-------------|----------------|
-| Use Case | Transform Figma code | General development |
+| Use Case | Transform source code | General development |
 | Upload Required | Yes (zip file) | No |
 | File Analysis | Yes | No |
 | Context | Uploaded files | Project architecture |
@@ -179,7 +179,7 @@ curl -X POST http://localhost:8081/api/import/session/{id}/command \
 ## Benefits
 
 1. **Faster**: No need to create and upload zip files
-2. **Flexible**: Use for any development task, not just Figma transformations
+2. **Flexible**: Use for any development task, not just source code transformations
 3. **Interactive**: Full two-way conversation with Claude
 4. **Contextual**: Still gets project structure and API docs
 5. **Focused**: Work in specific MFE if needed
@@ -188,7 +188,7 @@ curl -X POST http://localhost:8081/api/import/session/{id}/command \
 
 ### Traditional (With Upload)
 ```
-1. Export code from Figma → zip
+1. Export code from source code → zip
 2. Create session
 3. Upload zip
 4. Wait for analysis
@@ -234,6 +234,6 @@ None! Direct mode has all the same capabilities as upload mode:
 
 ## Summary
 
-Direct mode makes Uber Snabel a **general-purpose AI pair programming tool** in addition to a Figma transformation system. You can now use it for any development task without needing to upload files first.
+Direct mode makes Uber Snabel a **general-purpose AI pair programming tool** in addition to a source code transformation system. You can now use it for any development task without needing to upload files first.
 
 **Start talking to Claude Code immediately for any development task!**

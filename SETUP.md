@@ -72,8 +72,8 @@ Open browser: http://localhost:8081
    - Add instructions: "Create an invoice list with filtering and pagination"
    - Click "Create Session"
 
-2. **Upload Figma Code**
-   - Select zip file with Figma-exported TypeScript
+2. **Upload source Code**
+   - Select zip file with uploaded TypeScript
    - Click "Upload & Analyze"
    - Review file analysis
 
@@ -104,7 +104,7 @@ claude.executable=claude
 claude.unsafe.mode=true
 
 # Git settings
-branch.prefix=figma-import
+branch.prefix=claude-code
 
 # Limits
 upload.max.size.mb=100
@@ -251,7 +251,7 @@ java -jar target/uber-snabel-1.0.0-SNAPSHOT-runner.jar
 
 - Use only in trusted environments
 - Do not expose to public internet
-- Review all Figma code before uploading
+- Review all source code before uploading
 - Monitor git commits created by Claude
 - Keep database credentials secure
 

@@ -86,7 +86,6 @@ async function loadMfes() {
 // Session Management
 async function createSession() {
     const description = document.getElementById('description').value;
-    const instructions = document.getElementById('instructions').value;
     const targetMfe = document.getElementById('targetMfe').value;
 
     if (!description) {
@@ -98,16 +97,17 @@ async function createSession() {
         const response = await fetch('/api/import/session', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ description, instructions, targetMfe })
+            body: JSON.stringify({ description, instructions: '', targetMfe })
         });
 
         const data = await response.json();
         currentSessionId = data.sessionId;
 
-        alert('Session created: ' + data.sessionId);
-
-        // Show upload step
+        // Show upload/start step
         document.getElementById('step-upload').classList.remove('hidden');
+
+        // Automatically start Claude Code
+        await startWithoutUpload();
 
     } catch (error) {
         alert('Failed to create session: ' + error.message);

@@ -20,7 +20,7 @@ public class GitResource {
     AppConfig appConfig;
 
     /**
-     * Reset frontend: if on figma-import branch, delete it and switch to main; otherwise reset to HEAD
+     * Reset frontend: if on claude-code branch, delete it and switch to main; otherwise reset to HEAD
      */
     @POST
     @jakarta.ws.rs.Path("/reset-frontend")
@@ -54,8 +54,8 @@ public class GitResource {
             String currentBranch = branchOutput.toString().trim();
             StringBuilder output = new StringBuilder();
 
-            // If on a figma-import branch, delete it and switch to main
-            if (currentBranch.startsWith("figma-import/")) {
+            // If on a claude-code branch, delete it and switch to main
+            if (currentBranch.startsWith(appConfig.getBranchPrefix() + "/")) {
                 // Switch to main
                 ProcessBuilder pbCheckout = new ProcessBuilder("git", "checkout", "main");
                 pbCheckout.directory(frontendDir.toFile());
@@ -76,7 +76,7 @@ public class GitResource {
                         .build();
                 }
 
-                // Delete the figma-import branch
+                // Delete the claude-code branch
                 ProcessBuilder pbDelete = new ProcessBuilder("git", "branch", "-D", currentBranch);
                 pbDelete.directory(frontendDir.toFile());
                 pbDelete.redirectErrorStream(true);

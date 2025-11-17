@@ -42,7 +42,7 @@ Full API documentation available in `docs/API.md`
 
 Key endpoints:
 - `POST /api/import/session` - Create new import session
-- `POST /api/import/session/{id}/upload` - Upload Figma zip
+- `POST /api/import/session/{id}/upload` - Upload source zip
 - `POST /api/import/session/{id}/start` - Start transformation
 - `WS /ws/logs/{sessionId}` - Real-time log streaming
 
@@ -52,7 +52,7 @@ Access the web interface at: http://localhost:8081
 
 Features:
 - Create new import sessions
-- Upload Figma exports
+- Upload source exports
 - Monitor transformations in real-time
 - View git diffs
 - Validate and merge code
@@ -69,7 +69,7 @@ The system is ready to use. To test:
 
 1. Open http://localhost:8081 in your browser
 2. Create a new import session
-3. Upload a Figma-exported zip file
+3. Upload a uploaded zip file
 4. Start the transformation
 5. Monitor progress via WebSocket logs
 6. Validate and merge changes

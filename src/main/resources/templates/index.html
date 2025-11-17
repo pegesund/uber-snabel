@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Uber Snabel - Figma to Code Transformer</title>
+    <title>Über Snabel - Claude Code Interface</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .log-entry {
@@ -21,8 +21,8 @@
         <!-- Header -->
         <header class="bg-white shadow">
             <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                <h1 class="text-3xl font-bold text-gray-900">Uber Snabel</h1>
-                <p class="mt-1 text-sm text-gray-500">Transform Figma code to production-ready React</p>
+                <h1 class="text-3xl font-bold text-gray-900">Über Snabel</h1>
+                <p class="mt-1 text-sm text-gray-500">Develop with Claude Code assistance</p>
             </div>
         </header>
 
@@ -106,7 +106,7 @@
                 <div class="border-b border-gray-200">
                     <nav class="-mb-px flex" aria-label="Tabs">
                         <button onclick="showTab('new')" id="tab-new" class="tab-button border-b-2 border-indigo-500 py-4 px-6 text-center font-medium text-sm text-indigo-600">
-                            New Import
+                            New Session
                         </button>
                         <button onclick="showTab('sessions')" id="tab-sessions" class="tab-button border-b-2 border-transparent py-4 px-6 text-center font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300">
                             Sessions
@@ -119,9 +119,9 @@
 
                 <!-- Tab Content -->
                 <div class="p-6">
-                    <!-- New Import Tab -->
+                    <!-- New Session Tab -->
                     <div id="content-new" class="tab-content">
-                        <h2 class="text-2xl font-bold mb-4">Create New Import</h2>
+                        <h2 class="text-2xl font-bold mb-4">Create New Session</h2>
 
                         <div class="space-y-6">
                             <!-- Step 1: Create Session -->
@@ -137,56 +137,30 @@
                                         <select id="targetMfe" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2 border">
                                             <option value="">Loading MFEs...</option>
                                         </select>
-                                        <p class="mt-1 text-xs text-gray-500">Select which MFE app to modify with the Figma code</p>
+                                        <p class="mt-1 text-xs text-gray-500">Select which MFE app to work with</p>
                                     </div>
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700">Instructions for Claude</label>
-                                        <textarea id="instructions" rows="4" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2 border" placeholder="Additional instructions for Claude Code..."></textarea>
-                                    </div>
-                                    <button onclick="createSession()" class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">
-                                        Create Session
+                                    <button onclick="createSession()" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700">
+                                        Start Claude Code Session
                                     </button>
                                 </div>
                             </div>
 
-                            <!-- Step 2: Upload Zip (Optional) -->
+                            <!-- Step 2: Start Claude Code -->
                             <div id="step-upload" class="border rounded-lg p-4 hidden">
-                                <h3 class="text-lg font-semibold mb-3">Step 2: Upload Figma Code (Optional)</h3>
+                                <h3 class="text-lg font-semibold mb-3">Step 2: Ready to Start</h3>
                                 <div class="space-y-4">
                                     <div class="bg-blue-50 border border-blue-200 rounded p-3 text-sm text-blue-800">
-                                        <strong>Two options:</strong><br>
-                                        1. <strong>Upload Figma code</strong> to transform it into production code<br>
-                                        2. <strong>Skip upload</strong> and start Claude Code directly for general development tasks
+                                        Session created! Click the button below to start your Claude Code session.
                                     </div>
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700">Zip File</label>
-                                        <input type="file" id="zipFile" accept=".zip" class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
-                                    </div>
-                                    <div class="flex space-x-2">
-                                        <button onclick="uploadZip()" class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">
-                                            Upload & Analyze
-                                        </button>
-                                        <button onclick="startWithoutUpload()" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700">
-                                            Start Without Upload
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Step 3: Start Transformation -->
-                            <div id="step-start" class="border rounded-lg p-4 hidden">
-                                <h3 class="text-lg font-semibold mb-3">Step 3: Start Transformation</h3>
-                                <div class="space-y-4">
-                                    <div id="analysis-results" class="bg-gray-50 p-3 rounded text-sm"></div>
-                                    <button onclick="startTransformation()" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700">
+                                    <button onclick="startWithoutUpload()" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700">
                                         Start Claude Code
                                     </button>
                                 </div>
                             </div>
 
-                            <!-- Step 4: Monitor & Control -->
+                            <!-- Step 3: Monitor & Control -->
                             <div id="step-monitor" class="border rounded-lg p-4 hidden">
-                                <h3 class="text-lg font-semibold mb-3">Step 4: Monitor Progress</h3>
+                                <h3 class="text-lg font-semibold mb-3">Step 3: Monitor Progress</h3>
                                 <div class="space-y-4">
                                     <div class="flex space-x-2">
                                         <button onclick="stopProcess()" class="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700">
@@ -222,7 +196,7 @@
 
                     <!-- Sessions Tab -->
                     <div id="content-sessions" class="tab-content hidden">
-                        <h2 class="text-2xl font-bold mb-4">Import Sessions</h2>
+                        <h2 class="text-2xl font-bold mb-4">Sessions</h2>
                         <div id="sessions-list" class="space-y-2">
                             <p class="text-gray-500">Loading sessions...</p>
                         </div>

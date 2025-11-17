@@ -10,9 +10,9 @@ http://localhost:8081
 
 ## Overview
 
-Uber Snabel provides a REST API for managing Figma-to-code transformation sessions. The API allows you to:
+Uber Snabel provides a REST API for managing source code-to-code transformation sessions. The API allows you to:
 - Create and manage import sessions
-- Upload Figma-exported code (zip files)
+- Upload uploaded code (zip files)
 - Start Claude Code transformations
 - Monitor progress via WebSocket
 - Validate generated code
@@ -63,7 +63,7 @@ curl -X POST http://localhost:8081/api/import/session \
 
 ### POST /api/import/session/{sessionId}/upload
 
-Upload a Figma-exported code zip file.
+Upload a uploaded code zip file.
 
 **Path Parameters:**
 - `sessionId` (string, required): Session ID from create session
@@ -90,7 +90,7 @@ Upload a Figma-exported code zip file.
 **Example:**
 ```bash
 curl -X POST http://localhost:8081/api/import/session/550e8400-e29b-41d4-a716-446655440000/upload \
-  -F "file=@figma-export.zip"
+  -F "file=@code-export.zip"
 ```
 
 ---
@@ -114,7 +114,7 @@ Start Claude Code transformation.
 {
   "sessionId": "550e8400-e29b-41d4-a716-446655440000",
   "status": "RUNNING",
-  "branchName": "figma-import/invoice-management-ui-20251109-160000"
+  "branchName": "claude-code/invoice-management-ui-20251109-160000"
 }
 ```
 
@@ -268,7 +268,7 @@ Get session details and status.
   "sessionId": "550e8400-e29b-41d4-a716-446655440000",
   "description": "Invoice management UI",
   "status": "COMPLETED",
-  "branchName": "figma-import/invoice-management-ui-20251109-160000",
+  "branchName": "claude-code/invoice-management-ui-20251109-160000",
   "createdAt": "2025-11-09T16:00:00",
   "completedAt": "2025-11-09T16:25:00",
   "merged": false,
@@ -469,7 +469,7 @@ Get current configuration.
   "temp.directory": "/tmp/uber-snabel",
   "claude.executable": "claude",
   "claude.unsafe.mode": "true",
-  "branch.prefix": "figma-import",
+  "branch.prefix": "claude-code",
   "upload.max.size.mb": "100",
   "session.timeout.hours": "24"
 }
@@ -614,9 +614,9 @@ SESSION_ID=$(curl -s -X POST http://localhost:8081/api/import/session \
 
 echo "Session created: $SESSION_ID"
 
-# 2. Upload Figma code
+# 2. Upload source code
 curl -X POST http://localhost:8081/api/import/session/$SESSION_ID/upload \
-  -F "file=@figma-export.zip"
+  -F "file=@code-export.zip"
 
 # 3. Start transformation
 curl -X POST http://localhost:8081/api/import/session/$SESSION_ID/start

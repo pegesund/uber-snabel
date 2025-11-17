@@ -145,11 +145,11 @@ public class FileService {
     public String buildClaudeInstructions(String userDescription, FileAnalysis analysis, String backendApiPath, String targetMfe) {
         StringBuilder instructions = new StringBuilder();
 
-        instructions.append("You are tasked with transforming Figma-exported TypeScript code into production-ready React code.\n\n");
+        instructions.append("You are tasked with transforming uploaded TypeScript code into production-ready React code.\n\n");
 
         instructions.append("PROJECT CONTEXT:\n");
         instructions.append("- User description: ").append(userDescription).append("\n");
-        instructions.append("- Figma code statistics: ")
+        instructions.append("- Source code statistics: ")
             .append(analysis.totalFiles).append(" files, ")
             .append(analysis.typescriptFiles).append(" TypeScript files\n");
 
@@ -160,7 +160,7 @@ public class FileService {
         instructions.append("\n");
 
         instructions.append("REQUIREMENTS:\n");
-        instructions.append("1. Transform all Figma components into proper React components\n");
+        instructions.append("1. Transform all components into proper React components\n");
         instructions.append("2. Use Tailwind CSS for all styling (remove inline styles)\n");
         instructions.append("3. ONLY use the backend API documented below - do NOT create fake/mock endpoints\n");
         instructions.append("4. Follow the Nx micro-frontend architecture in snabel_frontend\n");
@@ -208,7 +208,7 @@ public class FileService {
             instructions.append("IMPORTANT: You are working in apps/").append(targetMfe).append("/ - make all changes within this MFE directory.\n\n");
         }
 
-        instructions.append("Get started by analyzing the Figma code and creating a plan for the transformation.");
+        instructions.append("Get started by analyzing the source code and creating a plan for the transformation.");
 
         return instructions.toString();
     }

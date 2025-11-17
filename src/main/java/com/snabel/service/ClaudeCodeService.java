@@ -27,7 +27,6 @@ public class ClaudeCodeService {
     LogWebSocket logWebSocket;
 
     private final Map<String, String> sessionClaudeIds = new ConcurrentHashMap<>();
-    private final Map<String, Boolean> sessionFirstCommand = new ConcurrentHashMap<>();
     private final Map<String, CompletableFuture<Void>> runningTasks = new ConcurrentHashMap<>();
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -51,7 +50,6 @@ public class ClaudeCodeService {
         }
 
         sessionClaudeIds.put(sessionId, session.claudeSessionId);
-        sessionFirstCommand.put(sessionId, true);
         session.persist();
 
         logInfo(sessionId, "Claude Code session initialized");
@@ -98,14 +96,11 @@ public class ClaudeCodeService {
             cmdList.add("--dangerously-skip-permissions");
         }
 
-        // Use --continue for subsequent commands to maintain conversation history
-        Boolean isFirstCommand = sessionFirstCommand.get(sessionId);
-        if (isFirstCommand != null && !isFirstCommand) {
-            cmdList.add("--continue");
-        } else if (isFirstCommand != null) {
-            // Mark that we've sent the first command
-            sessionFirstCommand.put(sessionId, false);
-        }
+        // ALWAYS use --continue to maintain conversation history
+        // Claude Code will automatically detect if this is the first command
+        // and start a new session, or continue an existing one based on
+        // the working directory
+        cmdList.add("--continue");
 
         cmdList.add(command);
 
@@ -165,7 +160,6 @@ public class ClaudeCodeService {
     public void stopProcess(String sessionId) {
         runningTasks.remove(sessionId);
         sessionClaudeIds.remove(sessionId);
-        sessionFirstCommand.remove(sessionId);
         updateSessionStatus(sessionId, ImportSession.SessionStatus.PAUSED);
         logInfo(sessionId, "Session stopped");
     }
@@ -189,7 +183,6 @@ public class ClaudeCodeService {
              session.status == ImportSession.SessionStatus.TRANSFORMING)) {
             // Restore to in-memory map
             sessionClaudeIds.put(sessionId, session.claudeSessionId);
-            sessionFirstCommand.putIfAbsent(sessionId, false); // Assume not first command if restoring
             return true;
         }
 

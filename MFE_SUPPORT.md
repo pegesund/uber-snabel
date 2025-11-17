@@ -2,7 +2,7 @@
 
 ## Overview
 
-Uber Snabel now fully supports the Nx micro-frontend architecture used in the Snabel frontend project. Users can select which MFE to target when transforming Figma code, and Claude Code will work within the specific MFE directory.
+Uber Snabel now fully supports the Nx micro-frontend architecture used in the Snabel frontend project. Users can select which MFE to target when transforming source code, and Claude Code will work within the specific MFE directory.
 
 ## Architecture
 
@@ -100,7 +100,7 @@ IMPORTANT: You are working in apps/invoicing/ - make all changes within this MFE
 4. Click "Create Session"
 
 ### Step 2: Upload & Transform
-1. Upload Figma-exported zip
+1. Upload uploaded zip
 2. Start transformation
 3. **Claude Code runs in the MFE directory** (`apps/invoicing/`)
 
@@ -214,4 +214,4 @@ MFE support is fully integrated and tested. Users can now:
 - ✅ Get MFE-specific instructions for Claude
 - ✅ Maintain proper module federation architecture
 
-The implementation follows the Nx micro-frontend conventions and ensures that Figma transformations respect the modular architecture.
+The implementation follows the Nx micro-frontend conventions and ensures that source code transformations respect the modular architecture.

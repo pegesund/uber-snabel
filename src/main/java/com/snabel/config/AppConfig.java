@@ -61,7 +61,7 @@ public class AppConfig {
         configProperties.setProperty("temp.directory", defaultTempDirectory);
         configProperties.setProperty("claude.executable", defaultClaudeExecutable);
         configProperties.setProperty("claude.unsafe.mode", defaultClaudeUnsafeMode.toString());
-        configProperties.setProperty("branch.prefix", "figma-import");
+        configProperties.setProperty("branch.prefix", "claude-code");
         configProperties.setProperty("upload.max.size.mb", "100");
         configProperties.setProperty("session.timeout.hours", "24");
 
@@ -98,7 +98,7 @@ public class AppConfig {
     }
 
     public String getBranchPrefix() {
-        return configProperties.getProperty("branch.prefix", "figma-import");
+        return configProperties.getProperty("branch.prefix", "claude-code");
     }
 
     public int getUploadMaxSizeMb() {

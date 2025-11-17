@@ -31,15 +31,15 @@ public class GitService {
         String currentBranch = getCurrentBranch(sessionId);
         logInfo(sessionId, "Current branch: " + currentBranch);
 
-        // If already on a figma-import branch, reuse it
+        // If already on a claude-code branch, reuse it
         if (currentBranch.startsWith(appConfig.getBranchPrefix() + "/")) {
-            logInfo(sessionId, "Already on a figma-import branch, reusing: " + currentBranch);
+            logInfo(sessionId, "Already on a claude-code branch, reusing: " + currentBranch);
             return currentBranch;
         }
 
         // Only create new branch if on main/master
         if (!currentBranch.equals("main") && !currentBranch.equals("master")) {
-            throw new IOException("Cannot create figma-import branch: not on main/master branch (currently on: " + currentBranch + ")");
+            throw new IOException("Cannot create claude-code branch: not on main/master branch (currently on: " + currentBranch + ")");
         }
 
         String branchName = generateBranchName(description);

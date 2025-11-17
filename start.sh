@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "================================================"
-echo "  Uber Snabel - Figma to Code Transformer"
+echo "  Uber Snabel - source code to Code Transformer"
 echo "================================================"
 echo ""
 
