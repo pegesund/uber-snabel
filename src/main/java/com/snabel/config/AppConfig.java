@@ -1,6 +1,7 @@
 package com.snabel.config;
 
 import io.quarkus.runtime.Startup;
+import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
@@ -31,6 +32,11 @@ public class AppConfig {
     private Path configFile;
 
     public AppConfig() {
+        // Constructor - CDI will inject fields after this
+    }
+
+    @PostConstruct
+    public void init() {
         loadConfig();
     }
 
