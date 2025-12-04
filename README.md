@@ -4,6 +4,26 @@ A meta-programming system that transforms uploaded TypeScript code into producti
 
 This project uses Quarkus, the Supersonic Subatomic Java Framework.
 
+## Important for AI Assistants (Claude Code)
+
+When working in the accounting-system repo, the Vite dev server runs in the background on port 4200. If you perform git operations that change files (e.g., `git checkout`, `git merge`, `git revert`), Vite's file watcher may crash due to sudden file changes.
+
+**After any git operation that modifies working directory files, verify the server is still running:**
+```bash
+curl -s http://localhost:4200/frontend/ | head -1
+```
+
+**If no response, restart the server:**
+```bash
+cd /home/petter/snabel/accounting-system && pnpm run dev &
+```
+
+**Alternative approach for git operations (avoids crashing Vite):**
+Instead of `git checkout main && git merge branch`, push directly to remote:
+```bash
+git push origin branch-name:main
+```
+
 ## Overview
 
 Uber Snabel provides a web-based interface for accountants and designers to:
